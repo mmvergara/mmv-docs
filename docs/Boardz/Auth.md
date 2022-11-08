@@ -161,6 +161,8 @@ exports.postLogin = async (req, res, next) => {
 
 After all of the validation the server will send a http only cookie for the session auth
 
+---
+
 ## Logout
 
 ### Front-End
@@ -189,4 +191,177 @@ exports.postLogout = (req, res, next) => {
   });
 };
 ```
+
 note: an error can still occur here but instead we will ignore that and respond with a successful request anyways.
+
+---
+
+## Patch User Information
+
+### Change UserPic
+
+#### Front-End
+
+```jsx
+export const patchChangeUserPic = async (ChangeUserPicData: FormData): Promise<authResponse> => {
+  const result = await AuthRequest({
+    method: "patch",
+    url: "/auth/patch/userpic",
+    data: ChangeUserPicData,
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return result;
+};
+```
+
+#### Back-End
+
+```jsx
+// VALIDATIONS ⬆⬆⬆
+const foundUser = await userModel.findOne({ _id: userId });
+await clearImage(foundUser.userpic);
+try {
+  if (!foundUser) throw newError("User not found", 422);
+  foundUser.userpic = imgPath;
+  await foundUser.save();
+  res.status(200).send({ message: "Success: Image Uploaded", ok: true, imgPath });
+} catch (error) {
+  console.log('Something wen"t wrong in patchChangeEmail');
+  next(error);
+}
+```
+
+clearImage : clears image in the file system.
+
+```jsx
+const fs = require("fs");
+const path = require("path");
+
+module.exports = async (filepath) => {
+  const imgPath = path.join(__dirname + "\\..\\" + filepath);
+  fs.promises.unlink(imgPath).catch((err) => {});
+};
+```
+
+---
+
+### Change Email
+
+#### Front-End
+
+```jsx
+export const patchChangeEmail = async (ChangeEmailData: ChangeEmailForm): Promise<authResponse> => {
+  const result = await AuthRequest({
+    method: "patch",
+    url: "/auth/patch/email",
+    data: ChangeEmailData,
+  });
+  return result;
+};
+```
+
+#### Back-End
+
+```jsx
+// VALIDATIONS ⬆⬆⬆
+const findUser = userModel.findOne({ _id: userId });
+const findSameEmail = userModel.findOne({ email: newEmail });
+const [foundUser, foundSameEmail] = await Promise.all([findUser, findSameEmail]);
+try {
+  if (foundSameEmail) throw newError("Someone is already using that Email", 422);
+  if (!foundUser) throw newError("User not found", 422);
+
+  const comparisonResult = await bcrypt.compare(password, foundUser.password);
+  if (!comparisonResult) throw newError("Wrong Password");
+
+  foundUser.email = newEmail;
+  await foundUser.save();
+  res.status(200).send({ message: "Success: Email Changed Successfully", ok: true });
+} catch (err) {
+  console.log('Something wen"t wrong in patchChangeEmail');
+  err.statusCode = err.statusCode || 500;
+  next(err);
+}
+```
+
+---
+
+### Change Username
+
+#### Front-End
+
+```jsx
+export const patchChangeUsername = async (
+  ChangeUsernameData: ChangeUsernameForm
+): Promise<authResponse> => {
+  const result = await AuthRequest({
+    method: "patch",
+    url: "/auth/patch/username",
+    data: ChangeUsernameData,
+  });
+  return result;
+};
+```
+
+#### Back-End
+
+```jsx
+// VALIDATIONS ⬆⬆⬆
+const findUser = userModel.findOne({ _id: userId });
+const findSameUserName = userModel.findOne({ username: newUsername });
+const [foundUser, foundSameUsername] = await Promise.all([findUser, findSameUserName]);
+
+try {
+  if (foundSameUsername) throw newError("Someone is already using that username", 422);
+  if (!foundUser) throw newError("User not found", 422);
+
+  const comparisonResult = await bcrypt.compare(password, foundUser.password);
+  if (!comparisonResult) throw newError("Wrong Password");
+
+  foundUser.username = newUsername;
+  await foundUser.save();
+  res.status(200).send({ message: "Success: Username Changed Successfully", ok: true });
+} catch (err) {
+  console.log('Something wen"t wrong in patchChangeUsername');
+  err.statusCode = err.statusCode || 500;
+  next(err);
+}
+```
+
+### Change Password
+
+#### Front-End
+
+```jsx
+export const patchChangePassword = async (
+  ChangePassData: ChangePassForm
+): Promise<authResponse> => {
+  const result = await AuthRequest({
+    method: "patch",
+    url: "/auth/patch/password",
+    data: ChangePassData,
+  });
+  return result;
+};
+```
+
+#### Back-End
+
+```jsx
+const foundUser = await userModel.findOne({ _id: userId });
+try {
+  if (!foundUser) throw newError("User not found", 422);
+
+  const comparisonResult = await bcrypt.compare(oldPassword, foundUser.password);
+  if (!comparisonResult) throw newError("Wrong Password");
+
+  foundUser.password = await bcrypt.hash(newPassword, 8);
+  await foundUser.save();
+  res.status(200).send({ message: "Password Changed Successfully", ok: true });
+} catch (err) {
+  console.log('Something wen"t wrong in patchChangePassowrd');
+  next(err);
+}
+```

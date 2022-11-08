@@ -4,6 +4,7 @@ sidebar_position: 1
 
 # About
 
+My First Ever NODEJS/MERN Stack web app.
 Boardz is a lightweight mini social app that supports features like Board Posting and Global realtime chat!
 **Deployment Date: October 30, 2022**
 

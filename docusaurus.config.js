@@ -8,7 +8,7 @@ const darkCodeTheme = require("prism-react-renderer/themes/palenight");
 const config = {
   title: "MMV Docs",
   tagline: "Documentations about apps made by Vergara, Mark Matthew a developer",
-  url: "http://localhost:3000/",
+  url: "https://mmv-docs.netlify.app/",
   baseUrl: "/",
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
@@ -27,8 +27,7 @@ const config = {
       ({
         docs: {
           sidebarPath: require.resolve("./sidebars.js"),
-          editUrl:
-            "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/",
+          editUrl: "https://github.com/mmvergara/mmv-docs/tree/main/",
         },
         theme: {
           customCss: require.resolve("./src/css/custom.css"),
