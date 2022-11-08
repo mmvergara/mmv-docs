@@ -1,0 +1,134 @@
+---
+sidebar_position: 5
+---
+
+# Models
+
+Boardz is using **[Mongoose](https://mongoosejs.com/)** to manage it's database and these are the models that define on how the data is structured and relations/references are made.
+
+## User Model
+
+User model is just a standard user object that is stored in the database
+
+- Email
+- Username
+- Userpic
+- Password
+- Posts (list of posts by user)
+- Message (list of messages by user)
+- Timestamps : Enabled
+
+```jsx
+const userSchema = new Schema(
+  {
+    email: {
+      type: String,
+      required: true,
+    },
+    username: {
+      type: String,
+      required: true,
+    },
+    userpic: {
+      type: String,
+      default: "https://i.ibb.co/B2v65By/default.png",
+    },
+    password: {
+      type: String,
+      required: true,
+    },
+    posts: [{ type: Types.ObjectId, ref: "Post" }],
+    messages: [{ type: Types.ObjectId, ref: "Message" }],
+  },
+  { timestamps: true }
+);
+```
+
+## Board Model
+
+- Author : userID
+- BoardTitle
+- BoardContent
+- Likes: `Array of userID.length === totalLikes`
+- [Comments](http://localhost:3000/docs/Boardz/Models#comment-model) 
+- Timestamps : Enabled
+
+```jsx
+const boardPostSchema = new Schema(
+  {
+    author: {
+      type: Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    boardTitle: {
+      type: String,
+      required: true,
+    },
+    boardContent: {
+      type: String,
+      required: true,
+    },
+    likes: [
+      {
+        type: Types.ObjectId,
+        ref: "User",
+      },
+    ],
+    comments: [
+      {
+        type: Types.ObjectId,
+        ref: "Comment",
+      },
+    ],
+  },
+  { timestamps: true }
+);
+```
+
+## Comment Model
+
+- Comment Author : userID
+- Comment Content
+- Comment Likes : `Array of userID.length === totalLikes`
+- Timestamps : Enabled
+
+```jsx
+const commentSchema = new Schema(
+  {
+    commentAuthor: {
+      type: Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    commentContent: { type: String, required: true },
+    commentLikes: [
+      {
+        type: Types.ObjectId,
+        ref: "User",
+      },
+    ],
+  },
+  { timestamps: true }
+);
+```
+
+## Message Model
+
+- Message Author : userID
+- Messsage Content
+- Timestamps : Enabled
+
+```jsx
+const messageSchema = new Schema(
+  {
+    messageAuthor: {
+      type: Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    messageContent: { type: String, required: true },
+  },
+  { timestamps: true }
+);
+```
