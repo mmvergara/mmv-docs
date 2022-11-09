@@ -2,7 +2,7 @@
 sidebar_position: 10
 ---
 
-# Firebase
+# Firebase 
 
 Ashera is using Firebase as a backend more specifically 'Firestore' for realtime updates
 

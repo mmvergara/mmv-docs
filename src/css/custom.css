@@ -40,3 +40,8 @@ html[data-theme="dark"] .theme-doc-footer-edit-meta-row {
 html[data-theme="dark"] .navbar--fixed-top {
   background-color: #161b22;
 }
+
+
+
+img[alt=techIcon] { width: 30px; }
+img[alt=firebaseBig] { width: 30px; }

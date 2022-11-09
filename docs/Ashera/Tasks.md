@@ -24,9 +24,9 @@ We are using `onSnapshot` to update the UI everytime a change in the database is
   }, [auth]);
 ```
 
-## Creating and Deleting Task Section
+## Task Section
 
-Creating Task Section only needs a name and a user to be authenticated. Firebase really makes creating and deleting a doc really easy with their built in functions `addDoc` and `deleteDoc` from firestore.
+Creating Task Section only needs a Task Section Name and a user to be authenticated. Firebase really makes creating and deleting a doc really easy with their built in functions `addDoc` and `deleteDoc` from firestore.
 
 ```jsx
 //Refer to firebase section for imports and setups
@@ -48,7 +48,7 @@ export const deleteTaskSection = async (sectionId: string) => {
 };
 ```
 
-## Creating and Deleting Task
+## Task
 
 Creating and Deleting a Task is basically just the same as Creating and Deleting Task Section
 

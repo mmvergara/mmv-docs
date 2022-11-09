@@ -26,7 +26,9 @@ We are using `onSnapshot` to update the UI everytime a change in the database is
 ```
 
 ## Creating Notes
+
 Creating Notes is straightforward, the user needs to be signed in and we are using the `addDoc` firestore method to do operations
+
 ```jsx
 export const addNote = async (noteDetails: noteDetail) => {
   const author = authFB.currentUser?.uid!;
@@ -38,7 +40,9 @@ export const addNote = async (noteDetails: noteDetail) => {
 ```
 
 ## Deleting Notes
+
 Deleting notes only needs a noteId and using the Cloud Firestore Security Rules only users who owns that note can delete it.
+
 ```jsx
 export const deleteNote = async (noteId: string) => {
   const result = await deleteDoc(doc(notesRef, noteId));
@@ -47,6 +51,26 @@ export const deleteNote = async (noteId: string) => {
 ```
 
 ## Editing Notes
+
+Form for editing a note is the same as Creating a note but instead some props are present and therefore changes how the form behave
+
+```jsx
+const submitNoteHandler = async (e?: React.FormEvent<HTMLDivElement>) => {
+  if (e) e.preventDefault();
+  setIsLoading(true);
+  const noteDetails = {
+    noteContent: content,
+    noteTitle: title,
+  };
+  if (id) {
+    await editNote(noteDetails, id);
+  } else {
+    await addNote(noteDetails);
+  }
+  setIsLoading(false);
+  closeModalHandler();
+};
+```
 
 ```jsx
 export const editNote = async (noteDetails: noteDetail, noteId: string) => {
