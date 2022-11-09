@@ -50,7 +50,7 @@ const userSchema = new Schema(
 - BoardTitle
 - BoardContent
 - Likes: `Array of userID.length === totalLikes`
-- [Comments](http://localhost:3000/docs/Boardz/Models#comment-model) 
+- Comments : Array of CommentModel
 - Timestamps : Enabled
 
 ```jsx
