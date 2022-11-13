@@ -8,7 +8,7 @@ const darkCodeTheme = require("prism-react-renderer/themes/palenight");
 const config = {
   title: "MMV Docs",
   tagline: "Documentations about apps made by Vergara, Mark Matthew a developer",
-  url: "https://mmv-docs.netlify.app/",
+  url: "https://mmv-docs.vercel.app/",
   baseUrl: "/",
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
@@ -59,7 +59,7 @@ const config = {
           },
           {
             href: "https://github.com/mmvergara/",
-            label: "MMV Github",
+            label: "Github",
             position: "right",
           },
         ],
