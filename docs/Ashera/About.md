@@ -5,10 +5,10 @@ sidebar_position: 1
 # About
 
 Ashera Notes lightweight app that can manage your tasks and notes, yep That's it! <br/>
-**Deployment Date: November 6, 2022**
 
+- **Deployment Date: November 6, 2022**
 - **[Github](https://github.com/mmvergara/mmv-ashera)**
-- **[Website](https://mmv-ashera.netlify.app/)**
+- **https://mmv-ashera.vercel.app/**
 
 ## Technologies
 
