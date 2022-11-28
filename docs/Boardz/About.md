@@ -7,9 +7,9 @@ sidebar_position: 1
 My First Ever NODEJS/MERN Stack web app.
 Boardz is a lightweight mini social app that supports features like Board Posting and Global realtime chat! <br/>
 
-- **Deployment Date: October 30, 2022**
+- **https://mmv-boardz.vercel.app/**
 - **[Github](https://github.com/mmvergara/mmv-boardz)**
-- **[Website](https://mmv-boardz.vercel.app/)**
+- **Deployment Date: October 30, 2022**
 
 ## Technologies
 

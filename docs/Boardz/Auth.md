@@ -81,13 +81,12 @@ exports.putRegister = async (req, res, next) => {
 ### Front-End
 
 Form Validation is handled by **[Formik](https://formik.org/)** with **[Yup](https://github.com/jquense/yup)** as usual.<br/>
-Initial Values are also set for a dummy account for whoever wants to try out the website.
 
 ```jsx
 const formik = useFormik({
   initialValues: {
-    email: "salt2@gmail.com",
-    password: "salt1234",
+    email: "",
+    password: "",
   },
   validationSchema: loginValidationSchema,
   onSubmit: loginFormSubmitHandler,
