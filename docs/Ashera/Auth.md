@@ -56,11 +56,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 const handleSignIn = async () => {
   setStatus({ hasError: false, isLoading: true, statusText: "" });
   try {
-    const result = await signInWithEmailAndPassword(
-      authFB,
-      formik.values.SignInEmail,
-      formik.values.SignInPassword
-    );
+    const result = await signInWithEmailAndPassword(authFB, formik.values.SignInEmail, formik.values.SignInPassword);
     toast({
       description: "Login Successful",
       status: "success",
