@@ -9,7 +9,8 @@
 
 - CL = compression level <br/>
 - Image used = [Sample Image 151kb](https://i.ibb.co/V24xjQT/kazu.png)
-
+- All images are converted png ( bad implementation )
+> Converting to png results into more image file size 🤦🤦🤦 
 #### Packages Used
 
 1. [Imagescript](https://deno.land/x/imagescript@1.2.15/mod.ts) `deno`
