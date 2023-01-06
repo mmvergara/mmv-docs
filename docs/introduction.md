@@ -5,11 +5,11 @@ sidebar_position: 1
 # Introduction
 
 Hello!👋, I'm Mark Matthew M. Vergara <br/>
-This documentation website is for the apps I made that i wanted to document not all the apps i made have a documentation, i personally like to look back on my projects, to review design patterns, how much i improved in every project and also documenting them i think is a good way to **express my passion in coding** in general. 
+This documentation website is for the apps I made that i wanted to make documents for the apps i think deserves or need it. I personally like to look back on my projects, to review design patterns, how much i improved in every project and also documenting them i think is a good way to **express my passion in coding** in general. 
 
 There's a lot more reason why am I doing this but I'm gonna leave it like that for now.
 
-
+<!-- 
 **[React](https://reactjs.org/)**,
 **[ChakraUI](https://chakra-ui.com/)**,
 **[MaterialUI](https://mui.com/)**,
@@ -23,4 +23,4 @@ There's a lot more reason why am I doing this but I'm gonna leave it like that f
 **[Mongoose](https://mongoosejs.com/)**,
 **[Socket.io](https://socket.io/)**,
 
--
+- -->
