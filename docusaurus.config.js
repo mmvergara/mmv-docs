@@ -1,8 +1,8 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
 
-const lightCodeTheme = require("prism-react-renderer/themes/github");
-const darkCodeTheme = require("prism-react-renderer/themes/palenight");
+const lightCodeTheme = require("prism-react-renderer/themes/nightOwlLight");
+const darkCodeTheme = require("prism-react-renderer/themes/nightOwl");
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -26,6 +26,8 @@ const config = {
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
+          showLastUpdateAuthor: true,
+          showLastUpdateTime: true,
           sidebarPath: require.resolve("./sidebars.js"),
           editUrl: "https://github.com/mmvergara/mmv-docs/tree/main/",
         },
@@ -35,7 +37,6 @@ const config = {
       }),
     ],
   ],
-
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
@@ -55,12 +56,18 @@ const config = {
             type: "doc",
             docId: "introduction",
             position: "left",
-            label: "Docs",
+            label: "📃 Docs",
           },
           {
-            href: "https://github.com/mmvergara/",
-            label: "Github",
+            href: "https://markvergara.vercel.app/",
+            label: "Dev Website",
             position: "right",
+          },
+          {
+            href: "https://github.com/mmvergara/mmv-docs/",
+            position: "right",
+            className: "header-github-link",
+            "aria-label": "GitHub repository",
           },
         ],
       },
