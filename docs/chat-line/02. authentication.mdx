@@ -1,0 +1,185 @@
+---
+description: ""
+---
+
+# Authentication
+
+## Authentication
+
+## Client side validation
+
+Formik and Yup are used to handle all client side validation.
+
+## Supabase Authentication
+
+### Login
+
+Login is handled by using React Query using the useSignIn custom hook
+
+```ts
+import { showNotification } from "@mantine/notifications";
+import { SupabaseClient } from "@supabase/auth-helpers-react";
+import Router from "next/router";
+import { useMutation } from "react-query";
+import { DBTypes } from "../supabase/db-types";
+
+type auth = {
+  email: string;
+  password: string;
+  supabase: SupabaseClient<DBTypes>;
+};
+
+const singIn = async ({ email, password, supabase }: auth) => {
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
+  if (error) {
+    showNotification({ message: error?.message, color: "red" });
+    throw new Error(error?.message);
+  }
+  Router.push("/room/list");
+  showNotification({ message: "Sign in success", color: "green" });
+  return data;
+};
+
+const useSignIn = ({ email, password, supabase }: auth) => {
+  return useMutation("singin", () => singIn({ email, password, supabase }));
+};
+
+export default useSignIn;
+```
+
+this makes it easy to handle the loading state and error state of the login form
+
+```ts
+const handleOAuth = async (provider: Provider) => {
+  await supabase.auth.signInWithOAuth({ provider, options: { redirectTo: "/" } });
+};
+
+const handleSignIn = async () => login.mutate();
+const handleDummyAccLogin = async () => {
+  await formik.setFieldValue("email", "salt22@gmail.com");
+  await formik.setFieldValue("password", "salt1234");
+  await handleSignIn();
+};
+const formik = useFormik({
+  initialValues: { email: "", password: "" },
+  validationSchema: signInValidationSchema,
+  onSubmit: handleSignIn,
+});
+
+const useSignInParams = {
+  email: formik.values.email,
+  password: formik.values.password,
+  supabase,
+};
+const login = useSignIn(useSignInParams);
+```
+
+### Signup
+
+Signup is handled by using React Query using the useSignUp custom hook
+
+```ts
+import { showNotification } from "@mantine/notifications";
+import { SupabaseClient } from "@supabase/auth-helpers-react";
+import Router from "next/router";
+import { useMutation } from "react-query";
+import { DBTypes } from "../supabase/db-types";
+
+type auth = {
+  email: string;
+  password: string;
+  username: string;
+  supabase: SupabaseClient<DBTypes>;
+};
+
+const signUp = async ({ email, password, username, supabase }: auth) => {
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+  });
+  if (error) {
+    showNotification({ message: error?.message, color: "red" });
+    throw new Error(error?.message);
+  }
+
+  const { data: userData, error: userErr } = await supabase.auth.getUser();
+  if (userErr) throw new Error(userErr.message);
+
+  const { error: updateUsernameErr } = await supabase.from("profiles").update({ username }).eq("id", userData.user.id);
+  if (updateUsernameErr) throw new Error(updateUsernameErr.message);
+
+  Router.push("/");
+  showNotification({ message: "Sign Up success", color: "green" });
+  return data;
+};
+
+const useSignUp = ({ email, password, supabase, username }: auth) => {
+  return useMutation("Signup", () => signUp({ email, password, supabase, username }));
+};
+
+export default useSignUp;
+```
+
+again this makes it easy to handle the loading state and error state of the signup form
+
+```ts
+const handleSignUp = async () => signUp.mutate();
+
+const formik = useFormik({
+  initialValues: { email: "", password: "", username: "" },
+  validationSchema: signUpValidationSchema,
+  onSubmit: handleSignUp,
+});
+const useSignUpParams = {
+  email: formik.values.email,
+  password: formik.values.password,
+  username: formik.values.username,
+  supabase,
+};
+const signUp = useSignUp(useSignUpParams);
+```
+
+```ts
+const authHandler = async () => {
+  setIsLoading(true);
+
+  const email = usernameToEmail(formik.values.username);
+  const password = formik.values.password;
+  const userData = { email, password };
+
+  let error: AuthError | null = null;
+  let response: AuthResponse | null = null;
+
+  if (formState == "Login") response = await supabase.auth.signInWithPassword(userData);
+  if (formState === "Signup") response = await supabase.auth.signUp(userData);
+  if (response) error = response.error || null;
+
+  if (error) {
+    setAuthError(error?.message || "Error Occured");
+  } else {
+    toast.success("Authenticated");
+    router.push("/");
+    setAuthError(null);
+  }
+  setIsLoading(false);
+};
+```
+
+using the supabase sdk built in method for authentication
+
+### Logout
+
+Using the supabase sdk a simple function will log the user out
+
+```ts
+const handleLogout = async (e: SyntheticEvent) => {
+  e.preventDefault();
+  const { error } = await supabase.auth.signOut();
+  if (error) return showNotification({ message: error.message, color: "red" });
+  showNotification({ message: "Sign out success", color: "green" });
+  router.push("/");
+};
+```
