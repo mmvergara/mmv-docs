@@ -1,0 +1,84 @@
+---
+description: ""
+---
+
+# Adding Slash Commands
+
+This template makes adding command easier as upon a new command is requested a function will loop through the commands folder to fetch then and to execute a specific command requested. same process is done when registering the commands so you don't have to manually hard-code commands to process them
+
+## 1. Add a new TS File in the Command directory
+
+the commands directory is located in `/commands` (root folder) and add a new TS File there
+
+## 2. Add register and execute
+
+:::danger Important!
+
+- the command title/name should match the command.ts file for ex. for `ping` command you should name the file `ping.ts`
+- Don't change register and execute variable names
+
+:::
+
+2 values should be exported in a new slash command which are the register and execute
+
+### register
+
+This is the variable used when we are going to register our commands using the discord api
+
+```js
+export const register = new SlashCommandBuilder()
+  .setName("ping")
+  .setDescription("pong's you back! (bot check)");
+```
+
+### execute
+
+This function is executed when a user calls a specific command
+
+```ts
+export const execute = async (
+  interaction: APIApplicationCommandInteraction
+): Promise<APIInteractionResponse> => {
+  // Bot Logic Here
+  return {
+    type: 4,
+    data: {
+      content: `pong! ${interaction.member?.user.username}`,
+    },
+  };
+};
+```
+
+## tutorialhere.ts
+
+```ts
+import { SlashCommandBuilder } from "@discordjs/builders";
+import { executeCommand } from "@/types";
+
+// to add a command go to ./commands folder and create a new ts file
+
+// the command title/name should match the command.ts file for
+//      ex. for tutorialhere command you should name the file tutorialhere.ts
+
+// Don't change register and execute variable names
+export const register = new SlashCommandBuilder()
+  .setName("tutorialhere")
+  .setDescription("description of your command");
+
+export const execute: executeCommand = async (interaction) => {
+  // You have access to do interaction object
+  // https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-object
+
+  // Do your bot logic here
+  // You can even connect to a database
+
+  // you should return a APIInteractionResponse
+  // https://discord-api-types.dev/api/discord-api-types-v10#APIApplicationCommandInteraction
+  return {
+    type: 4,
+    data: {
+      content: `Hello World! ${interaction.member?.user.username}`,
+    },
+  };
+};
+```

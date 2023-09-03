@@ -1,0 +1,98 @@
+---
+description: ''
+---
+
+# Utilities
+
+Different utilities/helper functions are used to make the process easier and make's the code more cleaner
+
+## Body Parser
+
+Discord want's us to receive the request as a rawBody and not parsed one therefore this process is needed before the actual command execution process begins
+
+```ts
+import { NextApiRequest } from "next";
+
+// https://github.com/vercel/next.js/blob/86160a5190c50ea315c7ba91d77dfb51c42bc65f/test/integration/api-support/pages/api/no-parsing.js
+export const rawBodyToString = async (req: NextApiRequest): Promise<string> => {
+  const chunks: Buffer[] = [];
+  return new Promise((resolve, reject) => {
+    req.on("error", (error) => {
+      reject(error);
+    });
+    req.on("data", (chunk) => {
+      chunks.push(chunk);
+    });
+    req.on("end", () => {
+      resolve(Buffer.concat(chunks).toString());
+    });
+  });
+};
+```
+
+## Check Method
+
+Simply checks the http method.
+
+```ts
+import { NextApiRequest } from "next";
+
+type httpMethods = "PUT" | "POST" | "GET" | "DELETE";
+export default function allowedMethod(req: NextApiRequest, allowedMethod: httpMethods) {
+  return req.method === allowedMethod;
+}
+```
+
+## getCommands
+
+This will fetch all of the command files simply return a object with all of the commands name and their exports <br/>
+ex. output
+
+```js
+{
+ping:{ execute:Function,register:SlashCommandBuilderObject}
+help:{ execute:Function,register:SlashCommandBuilderObject}
+}
+```
+
+```ts
+import { APIApplicationCommandInteraction, APIInteractionResponse } from "discord-api-types/v10";
+import { SlashCommandBuilder } from "@discordjs/builders";
+import { resolve } from "path";
+import getTsFiles from "./getTsFiles";
+
+type commandModule = {
+  execute: (interaction: APIApplicationCommandInteraction) => Promise<APIInteractionResponse>;
+  register: SlashCommandBuilder;
+};
+
+const getCommands = async () => {
+  const commandDir = resolve(process.cwd(), "pages", "api", "discord-bot", "commands");
+  const commandFiles = getTsFiles(commandDir);
+  const commands: { [key: string]: commandModule } = {};
+  for (const file of commandFiles) {
+    try {
+      const fileContents = (await import("../pages/api/discord-bot/commands/" + file)) as commandModule;
+      if (fileContents) commands[file] = fileContents;
+    } catch (error) {
+      continue;
+    }
+  }
+  return commands;
+};
+
+export default getCommands;
+```
+
+## getTsFiles
+
+get's all ts files from a directory and returns a string of array with the names of the ts files.
+
+```ts
+import { readdirSync } from "fs";
+
+export default function getTsFiles(dir: string) {
+  const files = readdirSync(dir).filter((file) => file.endsWith(".ts"));
+  return files;
+}
+```
